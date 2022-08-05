@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useCallback, useState } from "react";
+import "./App.css";
+import { useFetch } from "./hooks/useFetch";
 
 function App() {
+  const [data, setData] = useState(null);
+  const refetch = useFetch();
+  const onFetchDataClick = useCallback(async () => {
+    const data = await refetch();
+    setData(data);
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="App-container">
+        <h1>Unit testing rtl</h1>
+
+        <div className="button-container">
+          <button onClick={onFetchDataClick} className="button">
+            Fetch data
+          </button>
+        </div>
+        {data && (
+          <div>
+            <img
+              width="150"
+              src="https://api.chucknorris.io/img/chucknorris_logo_coloured_small@2x.png"
+            />
+            <p>{data.value}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
